@@ -1,6 +1,18 @@
 import '@logseq/libs'
 
 import { autolinkContent, candidateNgrams, findExistingTitles } from './libs'
+import { SettingSchemaDesc } from '@logseq/libs/dist/LSPlugin'
+
+const settings: SettingSchemaDesc[] = [
+  {
+    key: 'maxNGrams',
+    type: 'number',
+    default: 5,
+    title: 'Maximum N-grams',
+    description:
+      'Change this number if your page titles are generally larger than 5 words, and you are not getting a match on these page titles.',
+  },
+]
 
 const main = async () => {
   logseq.UI.showMsg('logseq-autolink-plugin loaded')
@@ -50,4 +62,4 @@ const main = async () => {
   })
 }
 
-logseq.ready(main).catch(console.error)
+logseq.useSettingsSchema(settings).ready(main).catch(console.error)
