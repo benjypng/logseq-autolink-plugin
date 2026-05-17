@@ -1,7 +1,8 @@
 import '@logseq/libs'
 
-import { autolinkContent, candidateNgrams, findExistingTitles } from './libs'
 import { SettingSchemaDesc } from '@logseq/libs/dist/LSPlugin'
+
+import { autolinkContent, candidateNgrams, findExistingTitles } from './libs'
 
 const settings: SettingSchemaDesc[] = [
   {
