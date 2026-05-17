@@ -9,9 +9,9 @@
 ## ✨ Features
 
 - **Automatic Linking:** When you press Enter to start a new block, the previous block is scanned for any text that matches an existing page in your graph and rewritten with `[[Page Name]]` wiki links.
-- **Multi-word Titles:** Handles both single-word pages (`Social360`) and multi-word phrases (`Machine Learning`). Longer titles always win over shorter overlapping ones.
+- **Multi-word Titles:** Handles both single-word pages (`Syncope`) and multi-word phrases (`Machine Learning`). Longer titles always win over shorter overlapping ones.
 - **Safe Replacements:** Skips text that is already inside `[[wiki links]]`, `` `inline code` ``, fenced code blocks, and URLs — so existing markup and code stay untouched.
-- **Case-insensitive Matching:** `social360`, `Social360`, and `SOCIAL360` in your text all link to the same page; the casing you typed is preserved inside the link.
+- **Case-insensitive Matching:** `syncope`, `Syncope`, and `SYNCOPE` in your text all link to the same page; the casing you typed is preserved inside the link.
 - **Indexed Lookup:** Candidate matching is pushed into Logseq's own datascript store via `:block/name`, so no client-side page cache or invalidation logic is needed.
 
 ### How it works
@@ -42,9 +42,9 @@
 
 There is no command to run — once the plugin is loaded, autolinking happens passively:
 
-1. Type a block containing any text that matches an existing page name (e.g. `meeting on Social360`).
+1. Type a block containing any text that matches an existing page name (e.g. `meeting on Quantum Mechanics`).
 2. Press Enter to start a new block.
-3. The previous block is rewritten with the appropriate `[[...]]` links (e.g. `meeting on [[Social360]]`).
+3. The previous block is rewritten with the appropriate `[[...]]` links (e.g. `meeting on [[Quantum Mechanics]]`).
 
 #### What gets skipped
 
