@@ -5,7 +5,7 @@ on:
     branches:
       - "main"
     paths-ignore:
-      - 'README.md'
+      - "README.md"
   workflow_dispatch:
 
 env:
@@ -16,12 +16,12 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v5
 
       - name: Setup Node.js for semantic-release
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v5
         with:
-          node-version: '24'
+          node-version: "24"
 
       - name: Setup Bun
         uses: oven-sh/setup-bun@v2
@@ -40,6 +40,6 @@ jobs:
           ls
           echo "tag_name=git tag --sort version:refname | tail -n 1" >> $GITHUB_OUTPUT
       - name: Release
-        run: bunx semantic-release 
+        run: bunx semantic-release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
