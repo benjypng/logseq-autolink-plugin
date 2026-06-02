@@ -7,7 +7,9 @@ export const findExistingTitles = async (
      :in $ [?name ...]
      :where
      [?p :block/name ?name]
-     (not [?p :db/ident _])]`
+     (not [?p :db/ident _])
+     (or [_ :block/page ?p]
+         [_ :block/refs ?p])]`
   const rows = ((await logseq.DB.datascriptQuery(q, candidates)) ?? []) as [
     string,
   ][]
