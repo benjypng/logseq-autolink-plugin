@@ -18,7 +18,6 @@ const settings: SettingSchemaDesc[] = [
 const main = async () => {
   logseq.UI.showMsg('logseq-autolink-plugin loaded')
 
-  // Check if plugin is being used on the DB version
   const isDbGraph = await logseq.App.checkCurrentIsDbGraph()
   if (!isDbGraph) {
     logseq.UI.showMsg(
@@ -28,38 +27,28 @@ const main = async () => {
     return
   }
 
-  logseq.DB.onChanged(async ({ blocks, txMeta }) => {
-    if (!txMeta || !txMeta.outlinerOp || !blocks[0]) return
+  const autolinkBlock = async (uuid: string, content: string) => {
+    const titles = await findExistingTitles(candidateNgrams(content))
+    if (titles.length === 0) return
+    const out = autolinkContent(content, titles)
+    if (out !== content) await logseq.Editor.updateBlock(uuid, out)
+  }
 
-    switch (txMeta.outlinerOp) {
-      case 'save-block': {
-        break
-      }
+  logseq.DB.onChanged(async ({ txMeta }) => {
+    if (txMeta?.outlinerOp !== 'insert-blocks') return
 
-      case 'insert-blocks': {
-        const currBlkUuid = await logseq.Editor.checkEditing()
-        if (!currBlkUuid) return
+    const uuid = await logseq.Editor.checkEditing()
+    if (!uuid) return
 
-        const prevSiblingBlk = await logseq.Editor.getPreviousSiblingBlock(
-          currBlkUuid as string,
-        )
-        if (!prevSiblingBlk) return
-
-        const content = (prevSiblingBlk as { content?: string }).content
-        if (!content) return
-
-        const titles = await findExistingTitles(candidateNgrams(content))
-        if (titles.length === 0) return
-
-        const out = autolinkContent(content, titles)
-        if (out !== content)
-          await logseq.Editor.updateBlock(
-            (prevSiblingBlk as { uuid: string }).uuid,
-            out,
-          )
-        break
-      }
+    const tryLink = async (): Promise<boolean> => {
+      const blk = await logseq.Editor.getBlock(uuid as string)
+      const content = (blk as { content?: string } | null)?.content
+      if (!content) return false
+      await autolinkBlock(uuid as string, content)
+      return true
     }
+
+    if (!(await tryLink())) setTimeout(tryLink, 1100)
   })
 }
 
