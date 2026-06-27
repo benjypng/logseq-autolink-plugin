@@ -1,7 +1,10 @@
 import { MASK_RE } from '../constants'
 
-export const autolinkContent = (content: string, titles: string[]): string => {
-  const sorted = titles
+export const autolinkContent = (
+  content: string,
+  titles: Map<string, string>,
+): string => {
+  const sorted = [...titles.keys()]
     .filter((t) => t.length >= 2)
     .sort((a, b) => b.length - a.length)
   if (sorted.length === 0) return content
@@ -23,7 +26,9 @@ export const autolinkContent = (content: string, titles: string[]): string => {
     const i = m.index!
     const j = i + m[0].length
     if (blocked(i, j)) continue
-    edits.push([i, j, `[[${m[0]}]]`])
+    const uuid = titles.get(m[0].toLowerCase())
+    if (!uuid) continue
+    edits.push([i, j, `[[${uuid}]]`])
   }
 
   if (edits.length === 0) return content

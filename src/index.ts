@@ -13,6 +13,14 @@ const settings: SettingSchemaDesc[] = [
     description:
       'Change this number if your page titles are generally larger than 5 words, and you are not getting a match on these page titles.',
   },
+  {
+    key: 'linkOnlyNonEmptyPages',
+    type: 'boolean',
+    default: true,
+    title: 'Only link non-empty pages',
+    description:
+      'When enabled, autolinking only targets pages that contain at least one block or have at least one linked reference. This avoids linking to empty stub pages (e.g. acronyms or stray references). Disable to link any existing page.',
+  },
 ]
 
 const main = async () => {
@@ -29,7 +37,7 @@ const main = async () => {
 
   const autolinkBlock = async (uuid: string, content: string) => {
     const titles = await findExistingTitles(candidateNgrams(content))
-    if (titles.length === 0) return
+    if (titles.size === 0) return
     const out = autolinkContent(content, titles)
     if (out !== content) await logseq.Editor.updateBlock(uuid, out)
   }
